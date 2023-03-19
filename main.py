@@ -1,10 +1,14 @@
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
 
-from database import engine, Base, User
+from database import engine, Base, User, Map
 import schemas
 from sqlalchemy.orm import Session
+
+import aiofiles
+import aiofiles.os
 
 Base.metadata.create_all(engine)
 
@@ -33,16 +37,23 @@ def authenticate_user(uname: str, pword: str):
     return ret
 
 #todo: HTTP status kode
-@app.get("map/list{id}")
-def get_all_maps(token: str):
-    return "Get all maps from user"
+@app.get("/map/list{id}")
+def get_all_maps(id: int):
+    session = Session(bind=engine, expire_on_commit=False)
+    mapall = session.query(Map).filter(Map.uporabnik == id).all()
+    session.close()
+
+    return mapall
 
 #todo: HTTP status kode
-@app.get("map/{id}")
-def get_map(id: int):
-    return "Get map file"
+@app.get("/map/{id}")
+async def get_map(id: int):
+    session = Session(bind=engine, expire_on_commit=False)
+    file = session.query(Map).get(id)
+    session.close()
 
-#todo: pred ustvarjanjem preveri, ali uporabnik že obstaja, in vrni napako če ja
+    return FileResponse("files/" + file.filename)
+
 #todo: HTTP status kode
 @app.post("/user/add") 
 def add_user(user: schemas.User):
@@ -61,10 +72,20 @@ def add_user(user: schemas.User):
     return id
 
 #todo: HTTP status kode
-#@app.post("/map/add")
-#def add_map(todo: schemas.ToDo):
-#    return token
-#
+@app.post("/map/add")
+async def add_map(id: int, file: UploadFile):
+
+    async with aiofiles.open("files/" + file.filename, 'wb') as out_file:
+        content = await file.read()  # async read
+        await out_file.write(content)  # async write
+
+        session = Session(bind=engine, expire_on_commit=False)  
+        mapDB = Map(uporabnik = id, filename = file.filename)     
+        session.add(mapDB)
+        session.commit() 
+
+    return {"filename": file.filename}
+
 
 #todo: HTTP status kode
 @app.put("/update/user/{id}")
@@ -102,6 +123,14 @@ def delete_user(id:int):
 
 #todo: HTTP status kode
 @app.delete("/map/delete/{id}")
-def delete_map(token:str):
+async def delete_map(id:str):
+    session = Session(bind=engine, expire_on_commit=False) 
+    map = session.query(Map).get(id)
+
+    if map:
+        await aiofiles.os.remove("files/" + map.filename) 
+        session.delete(map)
+        session.commit()
+
     return "Delete map"
 
