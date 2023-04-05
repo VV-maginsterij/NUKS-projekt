@@ -52,7 +52,8 @@ async def get_map(id: int):
     file = session.query(Map).get(id)
     session.close()
 
-    return FileResponse("files/" + file.filename)
+    headers = {'Content-Disposition': 'attachment; filename='+file.filename}
+    return FileResponse("files/" + file.filename, headers=headers)
 
 #todo: HTTP status kode
 @app.post("/user/add") 
@@ -77,7 +78,8 @@ async def add_map(id: int, file: UploadFile):
 
     async with aiofiles.open("files/" + file.filename, 'wb') as out_file:
         content = await file.read()  # async read
-        await out_file.write(content)  # async write
+        out_file.write(content)  # async write
+        out_file.flush()
 
         session = Session(bind=engine, expire_on_commit=False)  
         mapDB = Map(uporabnik = id, filename = file.filename)     
@@ -132,5 +134,5 @@ async def delete_map(id:str):
         session.delete(map)
         session.commit()
 
-    return "Delete map"
+    return "Delete map" 
 
