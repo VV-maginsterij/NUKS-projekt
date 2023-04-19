@@ -20,3 +20,4 @@ API klici:
 /user/delete/{id}: izbris uporabnika  
 /map/delete/{id}: izbris datoteke poti  
   
+NA UPORABNIKOVI APLIKACIJI TRENUTNO UGOTAVLJAM, ZAKAJ SE NOČE POVEZATI NA API STREŽNIK. ČE NE BO ŠLO DRUGAČE, BOM FRONTEND PRESTAVIL NA SPLETNI STREŽNIK.
