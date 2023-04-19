@@ -20,4 +20,4 @@ API klici:
 /user/delete/{id}: izbris uporabnika  
 /map/delete/{id}: izbris datoteke poti  
   
-NA UPORABNIKOVI APLIKACIJI TRENUTNO UGOTAVLJAM, ZAKAJ SE NOČE POVEZATI NA API STREŽNIK. ČE NE BO ŠLO DRUGAČE, BOM FRONTEND PRESTAVIL NA SPLETNI STREŽNIK.
+Frontend aplikacije je narejen na pol(implementirana polovica API klicev; implementirani so tisti, ki se nanašajo na uporabnika sistema). Moram še ugotoviti kako se React postavi na strežniku, ali pa če se ga da izvoziti navadne datoteke in postaviti na Apache(Nginx) strežnik. Prijava v aplikacijo je med drugim možna z uporabniškim imenom "Vid" in geslom "12345".  
