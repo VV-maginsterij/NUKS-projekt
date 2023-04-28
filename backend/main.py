@@ -1,6 +1,6 @@
 from typing import Union
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -10,6 +10,9 @@ from sqlalchemy.orm import Session
 
 import aiofiles
 import aiofiles.os
+
+import requests, json
+import time
 
 Base.metadata.create_all(engine)
 
@@ -82,19 +85,25 @@ def add_user(user: schemas.User):
 
 #todo: HTTP status kode
 @app.post("/map/add")
-async def add_map(id: int, file: UploadFile):
+async def add_map(id: int, request:Request):
+    file = await request.body()
+    filename = str(time.time()) + str(id) 
+    tohash = str(time.time()) + str(id)
+    
+    headers = {"Content-Type": "application/json"}
+    response = requests.post('http://195.47.197.29:8080/function/filenamegenerator', data=json.dumps(tohash), headers=headers)
+    filename = response.text.strip() + ".json"
 
-    async with aiofiles.open("files/" + file.filename, 'wb') as out_file:
-        content = await file.read()  # async read
-        out_file.write(content)  # async write
-        out_file.flush()
+    out_file = open("files/" + filename , 'w')
+    out_file.write(file.decode("utf-8"))  # async write
+    out_file.close()
 
-        session = Session(bind=engine, expire_on_commit=False)  
-        mapDB = Map(uporabnik = id, filename = file.filename)     
-        session.add(mapDB)
-        session.commit() 
+    session = Session(bind=engine, expire_on_commit=False)  
+    mapDB = Map(uporabnik = id, filename = filename)     
+    session.add(mapDB)
+    session.commit() 
 
-    return {"filename": file.filename}
+    return {"filename": filename}
 
 
 #todo: HTTP status kode
