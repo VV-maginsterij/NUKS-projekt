@@ -91,7 +91,7 @@ async def add_map(id: int, request:Request):
     tohash = str(time.time()) + str(id)
     
     headers = {"Content-Type": "application/json"}
-    response = requests.post('http://192.168.0.12:8080/function/filenamegenerator', data=json.dumps(tohash), headers=headers)
+    response = requests.post('http://openfaas:8080/function/filenamegenerator', data=json.dumps(tohash), headers=headers)
     filename = response.text.strip() + ".json"
 
     out_file = open("files/" + filename , 'w')

@@ -285,6 +285,10 @@ function FormComponentProfil ({ setPageValue, UserId, setUserId}){
       console.error(error);
      });
   }
+
+  function handleReturn(){
+      setPageValue(2)
+  }
     
   return (
     <>
@@ -295,6 +299,7 @@ function FormComponentProfil ({ setPageValue, UserId, setUserId}){
       <p><input id="prijava" type="submit" value="SPREMENI PODATKE"/></p>
     </form>
     <button onClick={handleDelete}>IZBRIŠI PROFIL</button>
+    <button onClick={handleReturn}>NAZAJ</button>
     </>
     )
 }
@@ -326,13 +331,18 @@ function FormComponentCreate ({ setPageValue, setUserId }){
       console.error(error);
     });
   }
-    
+  function handleReturn(){
+    setPageValue(1)
+}
   return (
+    <>
     <form action="INDEX/index.php" onSubmit={handleSubmit}>
-      <p>Uporabniško ime: <input type="text" name="username" placeholder="Uporabniško ime"/></p>
-      <p>Elektronski naslov: <input type="text" name="mail" placeholder="Uporabniško ime"/></p>
+      <p>Uporabniško ime: <input type="text" name="username"/></p>
+      <p>Elektronski naslov: <input type="text" name="mail"/></p>
       <p>Geslo: <input type="password" name="geslo" placeholder="Geslo"/></p>
       <p><input id="prijava" type="submit" value="USTVARI PROFIL"/></p>
     </form>
+    <button onClick={handleReturn}>NAZAJ</button>
+    </>
     )
 }
