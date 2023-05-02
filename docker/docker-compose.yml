@@ -1,0 +1,14 @@
+version: '3'
+services:
+  openfaas:
+    image: vv6294/filenamegenerator
+    ports:
+      - "8080:8080" 
+  fastapi:
+    image: vv6294/fastapiimage
+    ports:
+      - "8000:8000"
+  frontend:
+    image: vv6294/reactimage
+    ports:
+      - "80:3000"
