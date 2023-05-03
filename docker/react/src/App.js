@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
+const ip = `http://${window.location.host}`
+
+
 export default function App() {
   const [page, setPageValue] = useState(1)
   const [userId, setUserId] = useState(0)
@@ -19,13 +22,13 @@ export default function App() {
 function FormComponent ({ setPageValue, setUserId }){
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    
     const form = event.target;
     const formData = new FormData(form);
 
     const formJson = Object.fromEntries(formData.entries());
 
-    fetch('http://192.168.0.12:8000/user/{uname, pword}?uname=' + formJson.username + '&pword=' + formJson.geslo)
+    fetch(ip + ':8000/user/{uname, pword}?uname=' + formJson.username + '&pword=' + formJson.geslo)
     .then(response => response.json())
     .then(data => {
       if (data){
@@ -42,7 +45,6 @@ function FormComponent ({ setPageValue, setUserId }){
   function handleCreate(){
       setPageValue(4)
   }
-    
   return (
     <>
     <form action="INDEX/index.php" onSubmit={handleSubmit}>
@@ -84,7 +86,7 @@ function Navbar({setPageValue, UserId}) {
 
   function deleteMap(mapId){
     console.log(mapId)
-    fetch('http://192.168.0.12:8000/map/delete/' + mapId, {method:'DELETE'})
+    fetch(ip + ':8000/map/delete/' + mapId, {method:'DELETE'})
     .then(response => response.json())
     .then(data => {
     })
@@ -98,7 +100,7 @@ function Navbar({setPageValue, UserId}) {
     
   
  
-    fetch("http://192.168.0.12:8000/map/" + mapId)
+    fetch(ip + ':8000/map/' + mapId)
       .then((response) => response.json())
       .then((data) => {
         var tmp;
@@ -113,7 +115,7 @@ function Navbar({setPageValue, UserId}) {
   }
 
   useEffect(() => {
-    fetch("http://192.168.0.12:8000/map/list" + UserId)
+    fetch(ip + ':8000/map/list' + UserId)
       .then((response) => response.json())
       .then((data) => {
         var tmp;
@@ -132,7 +134,7 @@ function Navbar({setPageValue, UserId}) {
     var data = [{"dolzina":D1.current.value, "sirina":S1.current.value},{"dolzina":D2.current.value, "sirina":S2.current.value},{"dolzina":D3.current.value, "sirina":S3.current.value},{"dolzina":D4.current.value, "sirina":S4.current.value},{"dolzina":D5.current.value, "sirina":S5.current.value},{"dolzina":D6.current.value, "sirina":S6.current.value}]
     const filedata= JSON.stringify(data)
     
-    fetch('http://192.168.0.12:8000/map/add?id='+UserId, {method: 'POST', body: filedata})
+    fetch(ip + ':8000/map/add?id='+UserId, {method: 'POST', body: filedata})
     .then(response => response.json())
     .then(data => {
       if (data){
@@ -232,7 +234,7 @@ function FormComponentProfil ({ setPageValue, UserId, setUserId}){
     const formJson = Object.fromEntries(formData.entries());
     
     if (formJson.username != ""){
-      fetch('http://192.168.0.12:8000/update/user/'+ UserId + '?field=upime&newval=' + formJson.username, {method:'PUT'})
+      fetch(ip + ':8000/update/user/'+ UserId + '?field=upime&newval=' + formJson.username, {method:'PUT'})
       .then(response => response.json())
       .then(data => {
         flag=true
@@ -244,7 +246,7 @@ function FormComponentProfil ({ setPageValue, UserId, setUserId}){
     }
     
     if (formJson.mail != ""){
-      fetch('http://192.168.0.12:8000/update/user/'+ UserId + '?field=enaslov&newval=' + formJson.mail, {method:'PUT'})
+      fetch(ip + ':8000/update/user/'+ UserId + '?field=enaslov&newval=' + formJson.mail, {method:'PUT'})
       .then(response => response.json())
       .then(data => {
         flag=true
@@ -256,7 +258,7 @@ function FormComponentProfil ({ setPageValue, UserId, setUserId}){
     }
 
     if (formJson.geslo != ""){
-      fetch('http://192.168.0.12:8000/update/user/'+ UserId + '?field=geslo&newval=' + formJson.geslo, {method:'PUT'})
+      fetch(ip + ':8000/update/user/'+ UserId + '?field=geslo&newval=' + formJson.geslo, {method:'PUT'})
       .then(response => response.json())
       .then(data => {
         flag=true
@@ -274,7 +276,7 @@ function FormComponentProfil ({ setPageValue, UserId, setUserId}){
   }
 
   function handleDelete(){
-    fetch('http://192.168.0.12:8000/user/delete/' + UserId, {method:'DELETE'})
+    fetch(ip + ':8000/user/delete/' + UserId, {method:'DELETE'})
     .then(response => response.json())
     .then(data => {
       setPageValue(1)
@@ -318,7 +320,7 @@ function FormComponentCreate ({ setPageValue, setUserId }){
       enaslov:formJson.mail
     }
 
-    fetch('http://192.168.0.12:8000/user/add', {method: 'POST', headers: {'Content-type': 'application/json'},body: JSON.stringify(data)})
+    fetch(ip + ':8000/user/add', {method: 'POST', headers: {'Content-type': 'application/json'},body: JSON.stringify(data)})
     .then(response => response.json())
     .then(data => {
       if (data){

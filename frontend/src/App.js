@@ -20,6 +20,8 @@ function FormComponent ({ setPageValue, setUserId }){
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    console.log(location.host)
+
     const form = event.target;
     const formData = new FormData(form);
 
