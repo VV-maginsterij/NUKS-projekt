@@ -20,4 +20,4 @@ API klici:
 /user/delete/{id}: izbris uporabnika  
 /map/delete/{id}: izbris datoteke poti  
   
-Frontend aplikacije je narejen na pol(implementirana polovica API klicev; implementirani so tisti, ki se nanašajo na uporabnika sistema). Moram še ugotoviti kako se React postavi na strežniku, ali pa če se ga da izvoziti navadne datoteke in postaviti na Apache(Nginx) strežnik. Prijava v aplikacijo je med drugim možna z uporabniškim imenom "Vid" in geslom "12345".  
+Projekt je pripravljen tako, da z datoteko NUKS-projekt/docker/docker-compose.yml ustvarimo docker kontejnerje. Na IP naslovu strežnika je nato potrebno najprej ustvariti nov uporabniški profil. V projektu je mišljeno, da bi uporabnik nato ustvaril pare točk z zemplepisno dolžino in širino, ki se jih s pritiskom na gumb nato shrani v datoteko na strežniku. Če je uporabnik že shranil kakšno datoteko, jo lahko s klikom na ime datoteke odpre, pri čemer se vsebina prikaže na istem mestu, kot bi uporabnik vpisoval točke za novo datoteko. Poleg tega lahko uporabnik tudi ureja svoj profil.  
